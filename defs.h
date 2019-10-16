@@ -78,6 +78,8 @@ void            krelease(char*);
 void            kretain(char*);
 int             krefcount(char*);
 int             kfreepagecount(void);
+void            update_checksum(addr_t);
+int             frames_are_identical(addr_t, addr_t);
 
 // kbd.c
 void            kbdintr(void);
