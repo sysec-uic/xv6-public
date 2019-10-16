@@ -16,19 +16,19 @@ main(int argc, char *argv[]) {
 
   for(int i=0;i<1000000;i++) {
     if(buf[i]!=1) {
-      printf(1,"Uh-oh! Found some junk in my frunk!\n");
+      printf(1,"Uh-oh! Found some junk in my frunk! at %d, %p: %d!\n", i, &buf[i], buf[i]);
       exit();
     }
   }
   for(int i=1000000;i<10000000;i++) {
     if(buf[i]) {
-      printf(1,"Uh-oh! Found some junk in my trunk!\n");
+      printf(1,"Uh-oh! Found some junk in my trunk! at %d, %p: %d!\n", i, &buf[i], buf[i]);
       exit();
     }
   }
-  
+
   printf(1,"Freepages after dedup: %d\n",freepages());
-  memset(buf+1000000,1,9000000);  
+  memset(buf+1000000,1,9000000);
   printf(1,"Freepages after writing the rest: %d\n",freepages());
   dedup();
   printf(1,"Freepages after dedup: %d\n",freepages());
