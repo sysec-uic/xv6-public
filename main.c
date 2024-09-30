@@ -18,11 +18,7 @@ int
 main(void)
 {
   uartearlyinit();
-<<<<<<< Updated upstream
   kinit1(end, P2V(PHYSTOP)); // phys page allocator
-=======
-  kinit1(end, P2V(4*1024*1024)); // phys page allocator. 
->>>>>>> Stashed changes
   kvmalloc();      // kernel page table
   mpinit();        // detect other processors
   lapicinit();     // interrupt controller
