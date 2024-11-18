@@ -151,8 +151,6 @@ static addr_t (*syscalls[])(void) = {
 void
 syscall(struct trapframe *tf)
 {
-  if (proc->killed)
-    exit();
   proc->tf = tf;
   uint64 num = proc->tf->rax;
   if (num > 0 && num < NELEM(syscalls) && syscalls[num]) {
