@@ -18,3 +18,6 @@ mkfs
 .gdbinit
 .gdb_history
 .depend
+.history/
+.vscode/
+cscope.out
