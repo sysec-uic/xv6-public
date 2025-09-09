@@ -93,7 +93,7 @@ sys_uptime(void)
 }
 
 #define MMAP_FAILED ((~0lu))
-  addr_t
+addr_t
 sys_mmap(void)
 {
   int fd, flags;
@@ -104,7 +104,7 @@ sys_mmap(void)
   return MMAP_FAILED;
 }
 
-  int
+int
 handle_pagefault(addr_t va)
 {
   // TODO: your code here
