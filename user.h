@@ -25,6 +25,8 @@ int getpid(void);
 char* sbrk(uint64);
 int sleep(int);
 int uptime(void);
+int dedup(void);
+int freepages(void);
 
 // ulib.c
 int stat(char*, struct stat*);

@@ -154,6 +154,7 @@ struct segdesc {
 
 #define PGROUNDUP(sz)  (((sz)+((addr_t)PGSIZE-1)) & ~((addr_t)(PGSIZE-1)))
 #define PGROUNDDOWN(a) (((a)) & ~((addr_t)(PGSIZE-1)))
+#define PGINDEX(physaddr) (((addr_t)physaddr)/PGSIZE)
 
 // Page table/directory entry flags.
 #define PTE_P           0x001   // Present
@@ -164,7 +165,7 @@ struct segdesc {
 #define PTE_A           0x020   // Accessed
 #define PTE_D           0x040   // Dirty
 #define PTE_PS          0x080   // Page Size
-#define PTE_MBZ         0x180   // Bits must be zero
+#define PTE_COW         0x200   // COW (hw5)
 
 // Address in page table or page directory entry
 #define PTE_ADDR(pte)   ((addr_t)(pte) & ~0xFFF)

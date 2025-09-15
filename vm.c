@@ -298,7 +298,7 @@ allocuvm(pde_t *pgdir, uint64 oldsz, uint64 newsz)
     if(mappages(pgdir, (char*)a, PGSIZE, V2P(mem), PTE_W|PTE_U) < 0){
       //cprintf("allocuvm out of memory (2)\n");
       deallocuvm(pgdir, newsz, oldsz);
-      kfree(mem);
+      krelease(mem);
       return 0;
     }
   }
@@ -324,9 +324,9 @@ deallocuvm(pde_t *pgdir, uint64 oldsz, uint64 newsz)
     if(pte && (*pte & PTE_P) != 0){
       pa = PTE_ADDR(*pte);
       if(pa == 0)
-        panic("kfree");
+        panic("dallocuvm");
       char *v = P2V(pa);
-      kfree(v);
+      krelease(v);
       *pte = 0;
     }
   }
@@ -364,23 +364,23 @@ freevm(pml4e_t *pml4)
                 if(pt[l] & PTE_P) {
                   char * v = P2V(PTE_ADDR(pt[l]));
 
-                  kfree((char*)v);
+                  krelease((char*)v);
                 }
               }
               //freeing every page table
-              kfree((char*)pt);
+              krelease((char*)pt);
             }
           }
           // freeing every page directory
-          kfree((char*)pd);
+          krelease((char*)pd);
         }
       }
       // freeing every page directory pointer table
-      kfree((char*)pdp);
+      krelease((char*)pdp);
     }
   }
   // freeing the pml4
-  kfree((char*)pml4);
+  krelease((char*)pml4);
 }
 
 // Clear PTE_U on a page. Used to create an inaccessible
@@ -465,5 +465,22 @@ copyout(pml4e_t *pgdir, addr_t va, void *p, uint64 len)
     buf += n;
     va = va0 + PGSIZE;
   }
+  return 0;
+}
+
+/* deduplicate pages between process virtual address vstart and virtual address vend */
+void
+dedup(void *vstart, void *vend)
+{
+  cprintf("didn't dedup anything\n");
+  return;
+}
+
+/* maybe perform copy-on-write on the page that contains virtual address v. 
+   returns 1 if copy-on-write was performed, 0 otherwise. */
+int
+copyonwrite(char* v)
+{
+  cprintf("didn't copyonwrite anything\n");
   return 0;
 }

@@ -77,6 +77,10 @@ trap(struct trapframe *tf)
     lapiceoi();
     break;
 
+  case T_PGFLT: // at least a write: copyonwrite may copy the page
+    if ((tf->err & 2) && copyonwrite((char *)rcr2()))
+      break;
+    // else fall-through to default:
   //PAGEBREAK: 13
   default:
     if(proc == 0 || (tf->cs&3) == 0){
