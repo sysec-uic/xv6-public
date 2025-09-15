@@ -49,7 +49,7 @@ kinit2()
   kmem.use_lock = 1;
 }
 
-  void
+void
 freerange(void *vstart, void *vend)
 {
   char *p;
@@ -62,7 +62,7 @@ freerange(void *vstart, void *vend)
 // which normally should have been returned by a
 // call to kalloc().  (The exception is when
 // initializing the allocator; see kinit above.)
-  void
+void
 kfree(char *v)
 {
   struct run *r;
@@ -85,7 +85,7 @@ kfree(char *v)
 // Allocate one 4096-byte page of physical memory.
 // Returns a pointer that the kernel can use.
 // Returns 0 if the memory cannot be allocated.
-  char*
+char*
 kalloc(void)
 {
   struct run *r;
@@ -107,7 +107,7 @@ kalloc(void)
 }
 
 // release frame with kernel virtual address v
-  void
+void
 krelease(char *v)
 {
   addr_t frame = V2P(v);
@@ -116,20 +116,20 @@ krelease(char *v)
     kfree(P2V(frame));
 }
 
-  void
+void
 kretain(char *v)
 {
   addr_t frame = V2P(v);
   frameinfo[PGINDEX(frame)].refs++;
 }
 
-  int
+int
 krefcount(char *v)
 {
   return frameinfo[PGINDEX(V2P(v))].refs;
 }
 
-  void
+void
 update_checksum(addr_t frame)
 {
   struct frameinfo *f = &frameinfo[PGINDEX(frame)];
@@ -141,14 +141,14 @@ update_checksum(addr_t frame)
 }
 
 // this should only be called after all checksums have been updated
-  int
+int
 frames_are_identical(addr_t frame1, addr_t frame2)
 {
   return frameinfo[PGINDEX(frame1)].checksum == frameinfo[PGINDEX(frame2)].checksum &&
     memcmp(P2V(frame1),P2V(frame2),PGSIZE)==0;
 }
 
-  int
+int
 kfreepagecount()
 {
   int i=0;

@@ -476,7 +476,7 @@ dedup(void *vstart, void *vend)
   return;
 }
 
-/* maybe perform copy-on-write on the page that contains virtual address v. 
+/* maybe perform copy-on-write on the page that contains virtual address v.
    returns 1 if copy-on-write was performed, 0 otherwise. */
 int
 copyonwrite(char* v)
