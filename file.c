@@ -82,14 +82,15 @@ fileclose(struct file *f)
 }
 
 int
-fileioctl(struct file *f, int param, int value) {  
+fileioctl(struct file *f, int param, int value) {
   if(devsw[f->ip->major].ioctl) {
     devsw[f->ip->major].ioctl(f,param,value);
-  } 
+  }
   else {
     cprintf("Got unknown IOCTL for dev=%d, major=%d, minor=%d, %d=%d\n",f->ip->dev,(int)f->ip->major,(int)f->ip->minor,param,value);
     return -1;
   }
+  return 0;
 }
 
 // Get metadata about file f.
