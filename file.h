@@ -6,6 +6,8 @@ struct file {
   struct pipe *pipe;
   struct inode *ip;
   uint off;
+
+  void * dev_payload;
 };
 
 
@@ -29,8 +31,9 @@ struct inode {
 // table mapping major device number to
 // device functions
 struct devsw {
-  int (*read)(struct inode*, uint, char*, int);
-  int (*write)(struct inode*, uint, char*, int);
+  int (*read)(struct file*, char*, int);
+  int (*write)(struct file*, char*, int);
+  int (*ioctl)(struct file*, int, int);
 };
 
 extern struct devsw devsw[];

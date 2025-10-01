@@ -249,20 +249,19 @@ consoleintr(int (*getc)(void))
   release(&input.lock);
 }
 
-  int
-consoleread(struct inode *ip, uint off, char *dst, int n)
+int
+consoleread(struct file *f, char *dst, int n)
 {
   uint target;
   int c;
 
-  iunlock(ip);
   target = n;
   acquire(&input.lock);
   while(n > 0){
     while(input.r == input.w){
       if (proc->killed) {
         release(&input.lock);
-        ilock(ip);
+        ilock(f->ip);
         return -1;
       }
       sleep(&input.r, &input.lock);
@@ -282,22 +281,26 @@ consoleread(struct inode *ip, uint off, char *dst, int n)
       break;
   }
   release(&input.lock);
-  ilock(ip);
 
   return target - n;
 }
 
-  int
-consolewrite(struct inode *ip, uint off, char *buf, int n)
+int
+consoleioctl(struct file *f, int param, int value)
+{
+  cprintf("Got unknown console ioctl request. %d = %d\n",param,value);
+  return -1;
+}
+
+int
+consolewrite(struct file *f, char *buf, int n)
 {
   int i;
 
-  iunlock(ip);
   acquire(&cons.lock);
   for(i = 0; i < n; i++)
     consputc(buf[i] & 0xff);
   release(&cons.lock);
-  ilock(ip);
 
   return n;
 }
@@ -310,6 +313,7 @@ consoleinit(void)
 
   devsw[CONSOLE].write = consolewrite;
   devsw[CONSOLE].read = consoleread;
+  devsw[CONSOLE].ioctl = consoleioctl;
   cons.locking = 1;
 
   ioapicenable(IRQ_KBD, 0);
