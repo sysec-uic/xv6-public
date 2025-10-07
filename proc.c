@@ -432,7 +432,8 @@ alarm(int secs) {
 
 void
 signal(int signum, void (*handler)(int)) {
-  cprintf("In signal(), with number %d and handler %x\n",signum,(int)handler);
+  cprintf("In signal(), with number %d and handler %p\n",
+	  signum, (addr_t)handler);
 }
 
 void

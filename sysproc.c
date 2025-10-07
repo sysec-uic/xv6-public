@@ -50,10 +50,10 @@ sys_alarm(void) {
 int sys_signal(void) {
   int signum;
   void (*handler)(int)=0;
-  
+
   if(argint(0, &signum) < 0)
     return -1;
-  if(argaddr(1, (int*)&handler) < 0)
+  if(argaddr(1, (addr_t *)&handler) < 0)
     return -1;
 
   signal(signum,handler);
@@ -66,7 +66,7 @@ sys_sigret(void) {
   return 0;
 }
 
-int 
+int
 sys_fgproc(void) {
   cprintf("In sys_fgproc\n");
   return 0;
