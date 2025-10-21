@@ -64,7 +64,7 @@ struct proc {
   struct inode *cwd;           // Current directory
   char name[16];               // Process name (debugging)
 
-  enum signal signal_pending;  
+  enum signal signal_pending;
 };
 
 // Process memory is laid out contiguously, low addresses first:

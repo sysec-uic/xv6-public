@@ -86,9 +86,9 @@ syscall_entry:
 #PAGEBREAK!
 
 .global syscall_trapret
-syscall_trapret:	
-syscall_sigtrapret:	
-	
+syscall_trapret:
+syscall_sigtrapret:
+
   popq    %rax
   popq    %rbx
   popq    %rcx
@@ -114,4 +114,3 @@ syscall_sigtrapret:
   cli
   movq    (%rsp), %rsp  # restore the user stack
   sysretq
-

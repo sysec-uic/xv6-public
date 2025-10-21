@@ -10,7 +10,6 @@ struct sleeplock;
 struct stat;
 struct superblock;
 struct trapframe;
-struct trapframe;
 
 //entry.S
 void            wrmsr(uint msr, uint64 val);
