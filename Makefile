@@ -119,7 +119,7 @@ mkfs: mkfs.c fs.h
 UPROGS= \
 	_cat _echo _forktest _grep _init _kill _ln _ls _mkdir \
 	_rm _sh _stressfs _usertests _wc _zombie \
-	_alarmtest _alarmtest2 _alarmtest3 _helloloop
+	_alarmtest1 _alarmtest2 _alarmtest3 _helloloop
 #
 
 fs.img: mkfs README $(UPROGS)
