@@ -22,7 +22,8 @@ struct inode {
   short minor;
   short nlink;
   uint size;
-  uint addrs[NDIRECT+1];
+  // Must match struct dinode in fs.h.
+  uint addrs[NDIRECT+2];
 };
 #define I_VALID 0x2
 
@@ -36,4 +37,3 @@ struct devsw {
 extern struct devsw devsw[];
 
 #define CONSOLE 1
-

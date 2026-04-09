@@ -341,7 +341,8 @@ iunlockput(struct inode *ip)
 // The content (data) associated with each inode is stored
 // in blocks on the disk. The first NDIRECT block numbers
 // are listed in ip->addrs[].  The next NINDIRECT blocks are
-// listed in block ip->addrs[NDIRECT].
+// listed in block ip->addrs[NDIRECT]. The starter reserves
+// ip->addrs[NDIRECT+1] for doubly-indirect blocks.
 
 // Return the disk block address of the nth block in inode ip.
 // If there is no such block, bmap allocates one.
@@ -370,6 +371,14 @@ bmap(struct inode *ip, uint bn)
     }
     brelse(bp);
     return addr;
+  }
+  bn -= NINDIRECT;
+
+  if(bn < NDOUBLE_INDIRECT){
+    // TODO(hw7): support doubly-indirect blocks.
+    // The starter returns 0 here so bigfile fails cleanly instead of
+    // panicking once it reaches the doubly-indirect region.
+    return 0;
   }
 
   panic("bmap: out of range");
@@ -404,6 +413,11 @@ itrunc(struct inode *ip)
     brelse(bp);
     bfree(ip->dev, ip->addrs[NDIRECT]);
     ip->addrs[NDIRECT] = 0;
+  }
+
+  if(ip->addrs[NDIRECT+1]){
+    // TODO(hw7): free all second-level data blocks, then each first-level
+    // indirect block, then the doubly-indirect root block itself.
   }
 
   ip->size = 0;
@@ -454,7 +468,7 @@ readi(struct inode *ip, char *dst, uint off, uint n)
 int
 writei(struct inode *ip, char *src, uint off, uint n)
 {
-  uint tot, m;
+  uint tot, m, addr;
   struct buf *bp;
 
   if(ip->type == T_DEV){
@@ -469,7 +483,10 @@ writei(struct inode *ip, char *src, uint off, uint n)
     return -1;
 
   for(tot=0; tot<n; tot+=m, off+=m, src+=m){
-    bp = bread(ip->dev, bmap(ip, off/BSIZE));
+    addr = bmap(ip, off/BSIZE);
+    if(addr == 0)
+      return -1;
+    bp = bread(ip->dev, addr);
     m = min(n - tot, BSIZE - off%BSIZE);
     memmove(bp->data + off%BSIZE, src, m);
     log_write(bp);
