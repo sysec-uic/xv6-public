@@ -121,7 +121,7 @@ UPROGS= \
 	_rm _sh _stressfs _usertests _wc _zombie \
 
 fs.img: mkfs $(UPROGS)
-	@ln -sf ../README README
+# 	@ln -sf ../README README
 	./mkfs fs.img README $(UPROGS)
 
 clean:

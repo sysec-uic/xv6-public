@@ -1,4 +1,6 @@
+<div align="center">
 <img src="./public/banner.svg">
+</div>
 
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
