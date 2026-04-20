@@ -2,6 +2,8 @@
 <img src="./public/banner.svg">
 </div>
 
+--- 
+
 
 xv6 is a re-implementation of Dennis Ritchie's and Ken Thompson's Unix
 Version 6 (v6).  xv6 loosely follows the structure and style of v6,
@@ -29,16 +31,6 @@ Clements, Anthony Shelton (x64), Jakob Eriksson (x64), and Xingbo Wu (x64).
 
 The code in the files that constitute xv6 is Copyright 2006-2017
 Frans Kaashoek, Robert Morris, Russ Cox, Anthony Shelton and Jakob Eriksson.
-
-ERROR REPORTS
-
-If you spot errors or have suggestions for improvement, please send email to
-Jakob Eriksson (jakob@uic.edu), or Frans Kaashoek and Robert Morris
-(kaashoek,rtm@csail.mit.edu).  If you have suggestions for improvements,
-please keep in mind that the main purpose of xv6 is as a teaching operating
-system. For example, we are in particular interested in simplifications and
-clarifications, instead of suggestions for new systems calls, more portability,
-etc.
 
 BUILDING AND RUNNING XV6
 

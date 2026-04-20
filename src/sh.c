@@ -12,6 +12,7 @@
 #define BACK 5
 
 #define MAXARGS 10
+#define MAX_JUMP_ENTRIES 50
 
 struct cmd {
   int type;
@@ -48,6 +49,13 @@ struct backcmd {
   int type;
   struct cmd* cmd;
 };
+
+struct{
+  char name[32];
+  char path[64];
+} jump_table[MAX_JUMP_ENTRIES];
+
+int jump_count;
 
 int fork1(void); // Fork but panics on failure.
 void panic(char*);
@@ -140,10 +148,57 @@ int getcmd(char* buf, int nbuf) {
   return 0;
 }
 
+void init_jump_table(){
+  int fd = open(".autojump_index",O_RDONLY);
+  // printf(1,"success? %d", fd);
+
+  if(fd<0)return;
+  char c;
+  int i=0;
+  jump_count=0;
+
+  while (read(fd,&c,1)>0 && jump_count < MAX_JUMP_ENTRIES){
+    i = 0;
+    while (c != ' ' && c != '\n') {
+      jump_table[jump_count].name[i++] = c;
+      if (read(fd, &c, 1) <= 0) break;
+    }
+    jump_table[jump_count].name[i] = '\0';
+
+    // Skip the space
+    if (c == ' ') read(fd, &c, 1);
+
+    // 2. Read the path (until newline)
+    i = 0;
+    while (c != '\n' && c != '\r') {
+      jump_table[jump_count].path[i++] = c;
+      if (read(fd, &c, 1) <= 0) break;
+    }
+    jump_table[jump_count].path[i] = '\0';
+    // printf(1, "%s -> %s", jump_table[jump_count].name, jump_table[jump_count].path);
+    jump_count++;
+  }
+  close(fd);
+}
+
+void jump(char *filename){
+  // printf(1, "Attempting to jump to: %s\n", filename);
+  // printf(1, "Count: %d", jump_count);
+  for(int i=0; i<jump_count;i++){
+    if(strcmp(filename,jump_table[i].name)==0){
+      if(chdir(jump_table[i].path)<0){
+        printf(2, "jump failed...could not reach %s\n",jump_table[i].path);
+      }
+      return;
+    }
+  }
+  printf(2,"cannot find %s, not in index",filename);
+}
+
 int main(void) {
   static char buf[100];
   int fd;
-
+  init_jump_table();
   // Ensure that three file descriptors are open.
   while ((fd = open("console", O_RDWR)) >= 0) {
     if (fd >= 3) {
@@ -159,6 +214,15 @@ int main(void) {
       buf[strlen(buf) - 1] = 0; // chop \n
       if (chdir(buf + 3) < 0)
         printf(2, "cannot cd %s\n", buf + 3);
+      continue;
+    }
+
+    //check for jump
+    if (buf[0] == 'j' && buf[1] == 'u' && buf[2] == 'm' && buf[3] == 'p' && buf[4] == ' ') {
+      buf[strlen(buf) - 1] = 0; // chop \n
+      char *filename = buf+5;
+
+      jump(filename);
       continue;
     }
     if (fork1() == 0)

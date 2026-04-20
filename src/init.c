@@ -17,6 +17,11 @@ int main(void) {
   dup(0); // stdout
   dup(0); // stderr
 
+  //--- EDITS ---
+  mkdir("test");
+  int fd = open("/test/test.c", O_CREATE | O_WRONLY);
+  close(fd);
+
   for (;;) {
     printf(1, "init: starting sh\n");
     pid = fork();
