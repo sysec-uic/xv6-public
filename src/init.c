@@ -17,10 +17,20 @@ int main(void) {
   dup(0); // stdout
   dup(0); // stderr
 
-  //--- EDITS ---
+  // --- start Eddie edits ---
   mkdir("test");
   int fd = open("/test/test.c", O_CREATE | O_WRONLY);
   close(fd);
+
+  pid = fork();
+  if(pid == 0){
+    char *cargv[] = {"crawler", 0};
+    exec("crawler", cargv);
+    printf(1, "init: crawler failed\n");
+    exit();
+  }
+  wait();
+  // --- Eddie Edits --- 
 
   for (;;) {
     printf(1, "init: starting sh\n");

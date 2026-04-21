@@ -117,7 +117,7 @@ mkfs: mkfs.c fs.h
 .PRECIOUS: %.o
 
 UPROGS= \
-	.autojump_index _cat _echo _forktest _grep _init _kill _ln _ls _mkdir \
+	_cat _crawler _echo _forktest _grep _init _kill _ln _ls _mkdir \
 	_move _rm _sh _stressfs _touch _usertests _wc _zombie \
 
 fs.img: mkfs $(UPROGS)

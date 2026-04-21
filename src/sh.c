@@ -149,7 +149,7 @@ int getcmd(char* buf, int nbuf) {
 }
 
 void init_jump_table(){
-  int fd = open(".autojump_index",O_RDONLY);
+  int fd = open(".jump_index",O_RDONLY);
   // printf(1,"success? %d", fd);
 
   if(fd<0)return;
@@ -224,6 +224,13 @@ int main(void) {
 
       jump(filename);
       continue;
+    }
+
+    //updates the indexed jump table 
+    if(buf[0] == 'r' && buf[1] == 'f' && buf[2] == 's' && buf[3] == 'h'){
+    init_jump_table();
+    printf(1, "Jump table updated.\n");
+    continue;
     }
     if (fork1() == 0)
       runcmd(parsecmd(buf));
