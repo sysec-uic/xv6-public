@@ -118,7 +118,7 @@ mkfs: mkfs.c fs.h
 
 UPROGS= \
 	.autojump_index _cat _echo _forktest _grep _init _kill _ln _ls _mkdir \
-	_rm _sh _stressfs _usertests _wc _zombie \
+	_move _rm _sh _stressfs _touch _usertests _wc _zombie \
 
 fs.img: mkfs $(UPROGS)
 # 	@ln -sf ../README README
